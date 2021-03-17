@@ -26,7 +26,7 @@ image = Image.new('1', (width, height))
 # Get drawing object to draw on image.
 draw = ImageDraw.Draw(image)
 # Draw a black filled box to clear the image.
-draw.rectangle((0,0,width,height), outline=0, fill=0)
+draw.rectangle((0,0,width,height), outline=0, fill=255)
 # Draw some shapes.
 # First define some constants to allow easy resizing of shapes.
 padding = -2
@@ -36,8 +36,7 @@ bottom = height-padding
 x = 0
 # Load default font.
 font = ImageFont.load_default()
-amplitude = height/4
-offset = height/2 - 4
+offset = height/2-4
 # Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
 # font = ImageFont.truetype('Minecraftia.ttf', 8)
@@ -71,45 +70,45 @@ while True:
 
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
     Disk = subprocess.check_output(cmd, shell = True )
-    y   = offset+math.floor(amplitude)
+    y   = offset
     # Write two lines of text.
-    draw.text((x, y),       "ssid: " + str(ssid),  font=font, fill=255)
+    draw.text((x, y),       "ssid: " + str(ssid),  font=font, fill=0)
     # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(1.5)
+    time.sleep(2)
     # Clear display.
     disp.clear()
     disp.display()
 
-    draw.text((x, y),       "IP: " + str(IP),  font=font, fill=255)
+    draw.text((x, y),       "IP: " + str(IP),  font=font, fill=0)
     # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(1.5)
+    time.sleep(2)
     # Clear display.
     disp.clear()
     disp.display()
     
-    draw.text((x, y),     str(CPU), font=font, fill=255)
+    draw.text((x, y),     str(CPU), font=font, fill=0)
        # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(1.5)
+    time.sleep(2)
     # Clear display.
     disp.clear()
     disp.display()
-    draw.text((x, y),    str(MemUsage),  font=font, fill=255)
+    draw.text((x, y),    str(MemUsage),  font=font, fill=0)
        # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(1.5)
+    time.sleep(2)
     # Clear display.
     disp.clear()
     disp.display()
-    draw.text((x, y),    str(Disk),  font=font, fill=255)
+    draw.text((x, y),    str(Disk),  font=font, fill=0)
        # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(1.5)
+    time.sleep(2)
     
