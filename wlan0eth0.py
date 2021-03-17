@@ -10,15 +10,8 @@ import subprocess
 
 
 
-
-
-
 # Raspberry Pi pin configuration:
 RST = None     # on the PiOLED this pin isnt used
-# Note the following are only used with SPI:
-DC = 23
-SPI_PORT = 0
-SPI_DEVICE = 0
 
 # 128x32 display with hardware I2C:
 disp = Adafruit_SSD1306.SSD1306_128_32(rst=RST)
@@ -77,7 +70,7 @@ print("ipaddress: " + ipaddress)
 
 # Define text and get total width.
 #text = "ssid:"+ ssid , "ipaddress:"+ipaddress
-maxwidth, unused = draw.textsize(text, font=font)
+#maxwidth, unused = draw.textsize(text, font=font)
 
 # Load default font.
 font = ImageFont.load_default()
@@ -104,7 +97,7 @@ while True:
     # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(.1)
+    time.sleep(1)
 
     # Clear display.
     disp.clear()
@@ -123,7 +116,7 @@ while True:
     # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(.1)
+    time.sleep(1)
 
     # Clear display.
     disp.clear()
@@ -142,26 +135,7 @@ while True:
     # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(.1)
-
-    # Clear display.
-    disp.clear()
-    disp.display()
-
-
-     cmd = "hostname -I | cut -d\' \' -f1"
-    IP = subprocess.check_output(cmd, shell = True )
-    
-
-    # Write two lines of text.
-
-    draw.text((x, top),       "IP: " + str(IP),  font=font, fill=255)
-    
-
-    # Display image.
-    disp.image(image)
-    disp.display()
-    time.sleep(.1)
+    time.sleep(1)
 
     
     
