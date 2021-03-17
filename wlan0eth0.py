@@ -55,36 +55,33 @@ print("ipaddress: " + ipaddress)
 
 # Load default font.
 font = ImageFont.load_default()
+# Draw a black filled box to clear the image.
+draw.rectangle((0,0,width,height), outline=0, fill=0)
 
+# cmd = "hostname -I | cut -d\' \' -f1"
+# IP = subprocess.check_output(cmd, shell = True )
+#draw.text((x, top),"IP: " + str(IP),  font=font, fill=255)
+cmd = "top -bn1 | grep load | awk '{printf \"CPU Load: %.2f\", $(NF-2)}'"
+CPU = subprocess.check_output(cmd, shell = True )
+cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
+MemUsage = subprocess.check_output(cmd, shell = True )
+cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
+Disk = subprocess.check_output(cmd, shell = True )
+
+# Define text and get total width.
+text = "ssid: " + str(ssid) +"ipaddress: " + str(ipaddress) + "CPU" + str(CPU) + "MemUsage"+str(MemUsage) +"Disk"+str(Disk)
+maxwidth, unused = draw.textsize(text, font=font)
+
+# Set animation and sine wave parameters.
+amplitude = height/4
+offset = height/2 - 4
+velocity = -2
+startpos = width
+
+# Animate text moving in sine wave.
+print('Press Ctrl-C to quit.')
+pos = startpos
 while True:
-
-    # Draw a black filled box to clear the image.
-    draw.rectangle((0,0,width,height), outline=0, fill=0)
-
-    # cmd = "hostname -I | cut -d\' \' -f1"
-    # IP = subprocess.check_output(cmd, shell = True )
-    #draw.text((x, top),"IP: " + str(IP),  font=font, fill=255)
-    cmd = "top -bn1 | grep load | awk '{printf \"CPU Load: %.2f\", $(NF-2)}'"
-    CPU = subprocess.check_output(cmd, shell = True )
-    cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
-    MemUsage = subprocess.check_output(cmd, shell = True )
-    cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
-    Disk = subprocess.check_output(cmd, shell = True )
-
-
-    # Define text and get total width.
-    text = "ssid: " + str(ssid) +"ipaddress: " + str(ipaddress) + "CPU" + str(CPU) + "MemUsage"+str(MemUsage) +"Disk"+str(Disk)
-    maxwidth, unused = draw.textsize(text, font=font)
-
-    # Set animation and sine wave parameters.
-    amplitude = height/4
-    offset = height/2 - 4
-    velocity = -2
-    startpos = width
-
-    # Animate text moving in sine wave.
-    print('Press Ctrl-C to quit.')
-    pos = startpos
     # Clear image buffer by drawing a black filled box.
     draw.rectangle((0,0,width,height), outline=0, fill=0)
     # Enumerate characters and draw them offset vertically based on a sine wave.
