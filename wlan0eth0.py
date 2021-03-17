@@ -1,6 +1,7 @@
 
 import os
 import time
+import math
 import Adafruit_GPIO.SPI as SPI
 import Adafruit_SSD1306
 from PIL import Image
@@ -35,7 +36,8 @@ bottom = height-padding
 x = 0
 # Load default font.
 font = ImageFont.load_default()
-
+amplitude = height/4
+offset = height/2 - 4
 # Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
 # font = ImageFont.truetype('Minecraftia.ttf', 8)
@@ -69,9 +71,9 @@ while True:
 
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
     Disk = subprocess.check_output(cmd, shell = True )
-
+    y   = offset+math.floor(amplitude)
     # Write two lines of text.
-    draw.text((x, top),       "ssid: " + str(ssid),  font=font, fill=255)
+    draw.text((x, y),       "ssid: " + str(ssid),  font=font, fill=255)
     # Display image.
     disp.image(image)
     disp.display()
@@ -80,7 +82,7 @@ while True:
     disp.clear()
     disp.display()
 
-    draw.text((x, top),       "IP: " + str(IP),  font=font, fill=255)
+    draw.text((x, y),       "IP: " + str(IP),  font=font, fill=255)
     # Display image.
     disp.image(image)
     disp.display()
@@ -89,7 +91,7 @@ while True:
     disp.clear()
     disp.display()
     
-    draw.text((x, top+8),     str(CPU), font=font, fill=255)
+    draw.text((x, y),     str(CPU), font=font, fill=255)
        # Display image.
     disp.image(image)
     disp.display()
@@ -97,7 +99,7 @@ while True:
     # Clear display.
     disp.clear()
     disp.display()
-    draw.text((x, top+16),    str(MemUsage),  font=font, fill=255)
+    draw.text((x, y),    str(MemUsage),  font=font, fill=255)
        # Display image.
     disp.image(image)
     disp.display()
@@ -105,7 +107,7 @@ while True:
     # Clear display.
     disp.clear()
     disp.display()
-    draw.text((x, top+25),    str(Disk),  font=font, fill=255)
+    draw.text((x, y),    str(Disk),  font=font, fill=255)
        # Display image.
     disp.image(image)
     disp.display()
