@@ -61,70 +61,59 @@ while True:
     # Draw a black filled box to clear the image.
     draw.rectangle((0,0,width,height), outline=0, fill=0)
 
-    cmd = "hostname -I | cut -d\' \' -f1"
-    IP = subprocess.check_output(cmd, shell = True )
-    
-
-    # Write two lines of text.
-
-    draw.text((x, top),       "IP: " + str(IP),  font=font, fill=255)
-    
-
-    # Display image.
-    disp.image(image)
-    disp.display()
-    time.sleep(.1)
-
-    # Clear display.
-    disp.clear()
-    disp.display()
-
-
+    # cmd = "hostname -I | cut -d\' \' -f1"
+    # IP = subprocess.check_output(cmd, shell = True )
+    #draw.text((x, top),"IP: " + str(IP),  font=font, fill=255)
+    cmd = "top -bn1 | grep load | awk '{printf \"CPU Load: %.2f\", $(NF-2)}'"
+    CPU = subprocess.check_output(cmd, shell = True )
     cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
     MemUsage = subprocess.check_output(cmd, shell = True )
-    draw.text((x, top),"MemUsage: " + str(MemUsage),  font=font, fill=255)
-    
+    cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
+    Disk = subprocess.check_output(cmd, shell = True )
 
-    # Display image.
+
+    # Define text and get total width.
+    text = "ssid: " + str(ssid) +"ipaddress: " + str(ipaddress) + "CPU" + str(CPU) + "MemUsage"+str(MemUsage) +"Disk"+str(Disk)
+    maxwidth, unused = draw.textsize(text, font=font)
+
+    # Set animation and sine wave parameters.
+    amplitude = height/4
+    offset = height/2 - 4
+    velocity = -2
+    startpos = width
+
+    # Animate text moving in sine wave.
+    print('Press Ctrl-C to quit.')
+    pos = startpos
+    # Clear image buffer by drawing a black filled box.
+    draw.rectangle((0,0,width,height), outline=0, fill=0)
+    # Enumerate characters and draw them offset vertically based on a sine wave.
+    x = pos
+    for i, c in enumerate(text):
+        # Stop drawing if off the right side of screen.
+        if x > width:
+            break
+        # Calculate width but skip drawing if off the left side of screen.
+        if x < -10:
+            char_width, char_height = draw.textsize(c, font=font)
+            x += char_width
+            continue
+        # Calculate offset from sine wave.
+        y = offset+math.floor(amplitude)
+        # Draw text.
+        draw.text((x, y), c, font=font, fill=255)
+        # Increment x position based on chacacter width.
+        char_width, char_height = draw.textsize(c, font=font)
+        x += char_width
+    # Draw the image buffer.
     disp.image(image)
     disp.display()
-    time.sleep(.1)
-
-    # # Clear display.
-    # disp.clear()
-
-    # cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
-    # Disk = subprocess.check_output(cmd, shell = True )
-    
-
-    # # Write two lines of text.
-
-    # draw.text((x, top),       "Disk: " + str(Disk),  font=font, fill=255)
-    
-
-    # # Display image.
-    # disp.image(image)
-    # disp.display()
-    # time.sleep(.1)
-
-    # # Clear display.
-    # disp.clear()
-    # disp.display()
-
-
-    #  cmd = "hostname -I | cut -d\' \' -f1"
-    # IP = subprocess.check_output(cmd, shell = True )
-    
-
-    # # Write two lines of text.
-
-    # draw.text((x, top),       "IP: " + str(IP),  font=font, fill=255)
-    
-
-    # # Display image.
-    # disp.image(image)
-    # disp.display()
-    # time.sleep(.1)
-
+    # Move position for next frame.
+    pos += velocity
+    # Start over if text has scrolled completely off left side of screen.
+    if pos < -maxwidth:
+        pos = startpos
+    # Pause briefly before drawing next frame.
+    time.sleep(0.1)
     
     
